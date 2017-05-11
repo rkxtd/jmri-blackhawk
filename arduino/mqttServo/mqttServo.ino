@@ -4,8 +4,9 @@
 #include <Servo.h>
 #include <avr/wdt.h>
 
-// Update these with values suitable for your network.
+// LIST OF DEVICES ATTACHED TO YOUR ARDUINO
 String devices[] = {"ITTS1", "ITTS2"};
+// BOARD ID
 String boardName = "BA11AA";
 String boardsChannel = "boards";
 String sensorsChannel = "sensors/BA11AA";
@@ -14,7 +15,7 @@ EthernetClient ethClient;
 PubSubClient client(ethClient);
 Servo TS1;
 Servo TS2;
-int pos = 0;
+int pos;
 
 void callback(char* topic, char* payload, unsigned int length) {
   char boardsChannelChr[7];
