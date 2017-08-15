@@ -24,14 +24,16 @@ var state = {
     trains: {},
     turnouts: {}
 };
+if (process.env.JMRI_ENABLED) {
+    var jmri = new JMRIService(commandBuilder, state, function(message) {
+        var responseObject = JSON.parse(message);
 
-var jmri = new JMRIService(commandBuilder, state, function(message) {
-    var responseObject = JSON.parse(message);
+        if (responseObject.type === 'turnout') {
+            sendDeviceCommand(responseObject.data.name, responseObject.data.state === 2 ? 'open' : 'close')
+        }
+    });
+}
 
-    if (responseObject.type === 'turnout') {
-        sendDeviceCommand(responseObject.data.name, responseObject.data.state === 2 ? 'open' : 'close')
-    }
-});
 
 setInterval(updateBoardsStatus, 10000);
 setInterval(ping, 5000);

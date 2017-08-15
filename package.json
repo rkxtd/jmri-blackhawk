@@ -8,5 +8,8 @@
     "request": "^2.81.0"
   },
   "author": "Roman Shuvaryk<xcomanche@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "websocket": "^1.0.24"
+  }
 }
