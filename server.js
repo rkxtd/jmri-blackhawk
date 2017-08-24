@@ -49,6 +49,9 @@ client.on('message', function (topic, message) {
         case 'sensors':
             processSensorsMessages(message, time, Array.isArray(chunks) ? chunks[1] : null);
             break;
+        case 'trains':
+            processTrainsMessages(message, time);
+            break;
         default:
             console.log('[' + time + '] UNDEFINED TOPIC: [' + topic.toString() + '] ' + message.toString());
             break;
@@ -59,6 +62,7 @@ client.on('message', function (topic, message) {
 client.on('connect', function () {
     client.subscribe('boards');
     client.subscribe('sensors');
+    client.subscribe('trains');
     client.publish('boards', 'REGISTER');
 });
 
@@ -79,6 +83,19 @@ function processBoardsMessages(message, time) {
                 break;
         }
     }
+}
+
+function processTrainsMessages(message, time) {
+    var command = message.toString().split('::');
+    var train = parseInt(command[0], 10);
+    var forward = command[1] === 'FWD';
+    var speed = parseInt(command[2], 10) / 100;
+
+    jmri.sendCommand('throttle', {
+        'throttle': train,
+        'forward': forward,
+        'speed': speed
+    })
 }
 
 function processSensorsMessages(message, time, board) {
